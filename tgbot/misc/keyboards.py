@@ -28,3 +28,11 @@ main_info = InlineKeyboardMarkup(inline_keyboard=[
 
 cancel_inline = InlineKeyboardMarkup()
 cancel_inline.insert(InlineKeyboardButton(text='❌ Отмена', callback_data='cancelbutton'))
+
+feedback_inline = InlineKeyboardMarkup(row_width=1)
+
+btnBanInline = InlineKeyboardButton(text="🚫 Забанить пользователя", callback_data='ban_user')
+btnFeedbackInline = InlineKeyboardButton(text="📨 Ответить", callback_data='feedback_user')
+
+feedback_inline.insert(btnFeedbackInline)
+feedback_inline.insert(btnBanInline)

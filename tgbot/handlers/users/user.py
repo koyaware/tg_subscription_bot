@@ -1,5 +1,5 @@
 from aiogram import Dispatcher
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message
 
 from tgbot.config import db, BASE_DIR, time_sub_day
 from tgbot.misc.keyboards import main_info, mainMenu, sub_inline_markup, cancel_inline
@@ -41,11 +41,6 @@ async def bot_message(message: Message):
                 await message.bot.send_message(message.from_user.id, "Купите тариф!")
 
 
-async def cancel_button(call: CallbackQuery):
-    await call.bot.delete_message(call.from_user.id, call.message.message_id)
-    await call.bot.send_message(call.from_user.id, "Действие отменено.")
-
-
 def register_user(dp: Dispatcher):
     dp.register_message_handler(
         user_start, commands=["start"],
@@ -53,7 +48,4 @@ def register_user(dp: Dispatcher):
     )
     dp.register_message_handler(
         bot_message, state="*"
-    )
-    dp.register_callback_query_handler(
-        cancel_button, text="cancelbutton"
     )

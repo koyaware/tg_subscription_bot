@@ -2,9 +2,8 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from tgbot.config import BOT_TOKEN
+from tgbot.config import BOT_TOKEN, storage
 from tgbot.filters import register_all_filters
 from tgbot.handlers import register_all_handlers
 
@@ -18,7 +17,7 @@ async def main():
     )
     logger.info("Starting bot")
 
-    storage = MemoryStorage()
+    # storage = MemoryStorage()
     bot = Bot(token=BOT_TOKEN, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
 

@@ -2,7 +2,9 @@ import datetime
 import time
 from pathlib import Path
 
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from environs import Env
+from redis import asyncio as aioredis
 
 from tgbot.db import Database
 
@@ -17,7 +19,14 @@ PAYMENT_TOKEN = env.str('PAYMENT_TOKEN')
 
 ADMIN_IDS = [2420239, ]
 
+
 db = Database('database.db')
+storage = RedisStorage2(host='localhost', port=6379, db=0)
+
+
+async def connect_to_redis():
+    redis_pool = await aioredis.from_url('redis://localhost')
+    return redis_pool
 
 
 def days_to_seconds(days):

@@ -38,3 +38,18 @@ class Database:
                 return True
             else:
                 return False
+
+    def set_ban_status(self, user_id, ban_status):
+        with self.connection:
+            return self.cursor.execute("UPDATE users SET is_ban = ? WHERE user_id = ?", (ban_status, user_id,))
+
+    def get_ban_status(self, user_id):
+        with self.connection:
+            result = self.cursor.execute("SELECT is_ban FROM users WHERE user_id = ?", (user_id,)).fetchall()
+            for row in result:
+                ban_status = int(row[0])
+
+            if ban_status > 0:
+                return True
+            else:
+                return False

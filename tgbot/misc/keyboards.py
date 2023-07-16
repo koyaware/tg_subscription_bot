@@ -1,14 +1,25 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 
+from tgbot.misc.commands import Commands
 
-btnProfile = KeyboardButton('💻 Мои подписки')
-btnSub = KeyboardButton('❤ Тарифы')
-btnFeedback = KeyboardButton('📨 Обратная связь')
-btnChat = KeyboardButton('📨 Чат')
+btnProfile = KeyboardButton(Commands.my_profile.value)
+btnSub = KeyboardButton(Commands.my_subs.value)
+btnFeedback = KeyboardButton(Commands.feedback.value)
+btnChat = KeyboardButton(Commands.chat.value)
+btnAdmin = KeyboardButton(Commands.admin_menu.value)
+btnRates = KeyboardButton(Commands.rates.value)
+btnSpeaker = KeyboardButton(Commands.mailing.value)
 
 mainMenu = ReplyKeyboardMarkup(resize_keyboard=True)
+mainMenuAdmin = ReplyKeyboardMarkup(resize_keyboard=True)
 mainMenu.add(btnProfile, btnSub)
 mainMenu.add(btnFeedback)
+mainMenuAdmin.add(btnProfile, btnSub)
+mainMenuAdmin.add(btnFeedback)
+mainMenuAdmin.add(btnAdmin)
+
+adminMenu = ReplyKeyboardMarkup(resize_keyboard=True)
+adminMenu.add(btnRates, btnSpeaker)
 
 
 sub_inline_markup = InlineKeyboardMarkup(row_width=1)
@@ -36,3 +47,13 @@ btnFeedbackInline = InlineKeyboardButton(text="📨 Ответить", callback_
 
 feedback_inline.insert(btnFeedbackInline)
 feedback_inline.insert(btnBanInline)
+
+rates_inline = InlineKeyboardMarkup(row_width=1)
+
+btnBanIDInline = InlineKeyboardButton(text="🚫 Забанить пользователя", callback_data='ban_user_id')
+btnUnBanInline = InlineKeyboardButton(text="🔥 Разбанить пользователя", callback_data='unban_user')
+btnUserBannedInline = InlineKeyboardButton(text="📋 Таблица заблокированных", callback_data='banned_user')
+
+rates_inline.insert(btnBanIDInline)
+rates_inline.insert(btnUnBanInline)
+rates_inline.insert(btnUserBannedInline)

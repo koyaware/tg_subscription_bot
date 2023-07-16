@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from aiogram import Dispatcher
 from aiogram.types import Message
 
 from tgbot.config import db, BASE_DIR, time_sub_day
+from tgbot.filters.is_ban import IsBanFilter
 from tgbot.misc.keyboards import main_info, mainMenu, sub_inline_markup, cancel_inline
 from tgbot.misc.states import FeedbackState
 from tgbot.misc.text import start_message
@@ -9,7 +12,7 @@ from tgbot.misc.text import start_message
 
 async def user_start(message: Message):
     if (not db.user_exists(message.from_user.id)):
-        db.add_user(message.from_user.id)
+        db.add_user(message.from_user.id, message.from_user.username, message.from_user.full_name, datetime.now())
         await message.bot.send_message(message.from_user.id, text=start_message, reply_markup=main_info)
         with open(BASE_DIR /'contents/info.MP4', 'rb') as gif_file:
             await message.bot.send_animation(message.chat.id, gif_file, reply_markup=mainMenu)
@@ -43,9 +46,10 @@ async def bot_message(message: Message):
 
 def register_user(dp: Dispatcher):
     dp.register_message_handler(
-        user_start, commands=["start"],
+        user_start, IsBanFilter(),
+        commands=["start"],
         state="*", commands_prefix='!/'
     )
     dp.register_message_handler(
-        bot_message, state="*"
+        bot_message, IsBanFilter(), state="*"
     )

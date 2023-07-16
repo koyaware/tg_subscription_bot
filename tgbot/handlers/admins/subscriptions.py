@@ -4,6 +4,7 @@ from aiogram import Dispatcher
 from aiogram.types import ContentType, CallbackQuery, PreCheckoutQuery, Message
 
 from tgbot.config import PAYMENT_TOKEN, days_to_seconds, db
+from tgbot.filters.is_ban import IsBanFilter
 
 
 async def sub_month(call: CallbackQuery):
@@ -39,14 +40,14 @@ async def process_pay(message: Message):
 
 def register_subscription_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(
-        sub_month, text="submonth"
+        sub_month, IsBanFilter(), text="submonth", state='*'
     )
     dp.register_callback_query_handler(
-        sub_half_year, text="subhalfyear"
+        sub_half_year, IsBanFilter(), text="subhalfyear", state='*'
     )
     dp.register_pre_checkout_query_handler(
-        process_pre_checkout_query
+        process_pre_checkout_query, IsBanFilter(), state='*'
     )
     dp.register_message_handler(
-        process_pay, content_types=ContentType.SUCCESSFUL_PAYMENT
+        process_pay, IsBanFilter(), content_types=ContentType.SUCCESSFUL_PAYMENT, state='*'
     )

@@ -12,6 +12,7 @@ class AdminFilter(BoundFilter):
         self.is_superuser = is_superuser
 
     async def check(self, obj):
-        if self.is_superuser is None:
+        if obj.from_user.id in ADMIN_IDS:
+            return True
+        else:
             return False
-        return (obj.from_user.id in ADMIN_IDS) == self.is_superuser

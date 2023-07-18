@@ -9,3 +9,13 @@ class FeedbackState(StatesGroup):
 class RatesState(StatesGroup):
     message = State()
     ban_id = State()
+
+
+class MailingState(StatesGroup):
+    send_all = State()
+    send_sub = State()
+    send_not_sub = State()
+
+
+class PromoCodeState(StatesGroup):
+    code = State()

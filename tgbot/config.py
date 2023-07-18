@@ -16,6 +16,7 @@ env.read_env('.env')
 
 BOT_TOKEN = env.str('BOT_TOKEN')
 PAYMENT_TOKEN = env.str('PAYMENT_TOKEN')
+CHAT_BOT_TOKEN = env.str('CHAT_BOT_TOKEN')
 
 ADMIN_IDS = [2420239, ]
 

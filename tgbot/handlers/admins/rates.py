@@ -48,7 +48,7 @@ async def banned_users(call: CallbackQuery):
         return await call.bot.send_message(call.from_user.id, "<b>Нет заблокированных пользователей.</b>")
     else:
         for user in banned_users:
-            formatted_user = f"Заблокированный пользователь: \n{user}"
+            formatted_user = f"<b>Заблокированный пользователь:</b> \n{user}"
             await call.bot.send_message(call.from_user.id, formatted_user)
 
 

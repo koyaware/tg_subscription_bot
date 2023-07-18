@@ -13,16 +13,16 @@ from tgbot.misc.states import FeedbackState
 async def send_message(message: Message, state: FSMContext):
     for admin in ADMIN_IDS:
         if message.text == "💻 Мои подписки":
-            await message.answer("Действие отменено.\nПопробуйте заново.")
+            await message.answer("Действие отменено.")
             return await state.finish()
         elif message.text == "❤ Тарифы":
-            await message.answer("Действие отменено.\nПопробуйте заново.")
+            await message.answer("Действие отменено.")
             return await state.finish()
         elif message.text == "📨 Обратная связь":
-            await message.answer("Действие отменено.\nПопробуйте заново.")
+            await message.answer("Действие отменено.")
             return await state.finish()
         elif message.text == "📨 Чат":
-            await message.answer("Действие отменено.\nПопробуйте заново.")
+            await message.answer("Действие отменено.")
             return await state.finish()
         await message.bot.copy_message(chat_id=admin, from_chat_id=message.from_user.id, message_id=message.message_id)
         await message.bot.send_message(admin, f"🔺🔺🔺"

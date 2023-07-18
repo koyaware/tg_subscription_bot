@@ -6,7 +6,7 @@ from aiogram.types import Message
 from tgbot.config import BASE_DIR, db
 from tgbot.filters import AdminFilter
 from tgbot.misc.commands import Commands
-from tgbot.misc.keyboards import main_info, mainMenuAdmin, adminMenu, rates_inline
+from tgbot.misc.keyboards import main_info, mainMenuAdmin, adminMenu, rates_inline, mailing_inline
 from tgbot.misc.text import start_message
 
 
@@ -32,12 +32,15 @@ async def rate_users(message: Message):
                                    reply_markup=rates_inline)
 
 
+async def mailing_menu(message: Message):
+    await message.bot.send_message(message.from_user.id, 'Выберите группу пользователей для рассылки: ', reply_markup=mailing_inline)
+
+
 def register_admin(dp: Dispatcher):
     dp.register_message_handler(
         admin_start, AdminFilter(),
-        commands=['start'],
+        text=['/start', Commands.come_back.value],
         state='*',
-        commands_prefix='!/'
     )
     dp.register_message_handler(
         admin_menu, AdminFilter(),
@@ -47,5 +50,10 @@ def register_admin(dp: Dispatcher):
     dp.register_message_handler(
         rate_users, AdminFilter(),
         text=Commands.rates.value,
+        state='*'
+    )
+    dp.register_message_handler(
+        mailing_menu, AdminFilter(),
+        text=Commands.mailing.value,
         state='*'
     )

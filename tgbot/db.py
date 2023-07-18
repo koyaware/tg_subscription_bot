@@ -79,3 +79,53 @@ class Database:
                 formatted_users.append(formatted_user)
 
             return formatted_users
+
+    def get_users(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT user_id FROM users").fetchall()
+            return [row[0] for row in result]
+
+    def get_sub_users(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT user_id, time_sub FROM users").fetchall()
+            user_ids = []
+
+            for row in result:
+                user_id = row[0]
+                time_sub = int(row[1])
+
+                if time_sub > int(time.time()):
+                    user_ids.append(user_id)
+
+        return user_ids
+
+    def get_not_sub_users(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT user_id, time_sub FROM users").fetchall()
+            user_ids = []
+
+            for row in result:
+                user_id = row[0]
+                time_sub = int(row[1])
+
+                if time_sub < int(time.time()):
+                    user_ids.append(user_id)
+
+        return user_ids
+
+    def is_promo_code_used(self, user_id, promo_code):
+        with self.connection:
+            result = self.cursor.execute("SELECT * FROM used_promo_codes WHERE user_id=? AND code=?", (user_id, promo_code)).fetchone()
+            return result is not None
+
+    def get_discount(self, promo_code):
+        with self.connection:
+            result = self.cursor.execute("SELECT discount FROM promo_codes WHERE code=?", (promo_code,)).fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return None
+
+    def mark_promo_code_as_used(self, user_id, promo_code):
+        with self.connection:
+            self.cursor.execute("INSERT INTO used_promo_codes (user_id, code) VALUES (?, ?)", (user_id, promo_code))

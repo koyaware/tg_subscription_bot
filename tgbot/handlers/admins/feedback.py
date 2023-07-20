@@ -61,13 +61,17 @@ def register_feedback_handlers(dp: Dispatcher):
     dp.register_message_handler(
         send_message, IsBanFilter(),
         state=FeedbackState.waiting_for_message,
+        content_types=["text", "sticker", "pinned_message", "photo", "audio", "document", "animation ", "video",
+                       "voice", "has_media_spoiler", "contact", "location"]
     )
     dp.register_callback_query_handler(
         feedback_user, IsBanFilter(), text="feedback_user", state='*'
     )
     dp.register_message_handler(
         feedback_user_state, IsBanFilter(),
-        state=FeedbackState.waiting_for_admin_message
+        state=FeedbackState.waiting_for_admin_message,
+        content_types=["text", "sticker", "pinned_message", "photo", "audio", "document", "animation ", "video",
+                       "voice", "has_media_spoiler", "contact", "location"]
     )
     dp.register_callback_query_handler(
         cancel_button, IsBanFilter(), text="cancelbutton", state='*'

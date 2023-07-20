@@ -61,7 +61,9 @@ def register_mailings(dp: Dispatcher):
     )
     dp.register_message_handler(
         send_all_users_state, AdminFilter(),
-        state=MailingState.send_all
+        state=MailingState.send_all,
+        content_types=["text", "sticker", "pinned_message", "photo", "audio", "document", "animation ", "video",
+                       "voice", "has_media_spoiler", "contact", "location"]
     )
     dp.register_callback_query_handler(
         send_sub_users, AdminFilter(),
@@ -70,7 +72,9 @@ def register_mailings(dp: Dispatcher):
     )
     dp.register_message_handler(
         send_sub_users_state, AdminFilter(),
-        state=MailingState.send_sub
+        state=MailingState.send_sub,
+        content_types=["text", "sticker", "pinned_message", "photo", "audio", "document", "animation ", "video",
+                       "voice", "has_media_spoiler", "contact", "location"]
     )
     dp.register_callback_query_handler(
         send_not_sub_users, AdminFilter(),
@@ -79,5 +83,7 @@ def register_mailings(dp: Dispatcher):
     )
     dp.register_message_handler(
         send_not_sub_users_state, AdminFilter(),
-        state=MailingState.send_not_sub
+        state=MailingState.send_not_sub,
+        content_types=["text", "sticker", "pinned_message", "photo", "audio", "document", "animation ", "video",
+                       "voice", "has_media_spoiler", "contact", "location"]
     )

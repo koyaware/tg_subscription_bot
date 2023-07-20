@@ -20,7 +20,11 @@ class Database:
 
     def set_time_sub(self, user_id, time_sub):
         with self.connection:
-            return self.cursor.execute("UPDATE users SET time_sub = ? WHERE user_id = ?", (time_sub, user_id,))
+            try:
+                user_id = int(user_id)
+                return self.cursor.execute("UPDATE users SET time_sub = ? WHERE user_id = ?", (time_sub, user_id,))
+            except ValueError:
+                return self.cursor.execute("UPDATE users SET time_sub = ? WHERE username = ?", (time_sub, user_id,))
 
     def get_time_sub(self, user_id):
         with self.connection:
@@ -85,6 +89,11 @@ class Database:
             result = self.cursor.execute("SELECT user_id FROM users").fetchall()
             return [row[0] for row in result]
 
+    def get_usernames(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT username FROM users").fetchall()
+            return [row[0] for row in result]
+
     def get_sub_users(self):
         with self.connection:
             result = self.cursor.execute("SELECT user_id, time_sub FROM users").fetchall()
@@ -115,12 +124,12 @@ class Database:
 
     def is_promo_code_used(self, user_id, promo_code):
         with self.connection:
-            result = self.cursor.execute("SELECT * FROM used_promo_codes WHERE user_id=? AND code=?", (user_id, promo_code)).fetchone()
+            result = self.cursor.execute("SELECT * FROM used_promo_codes WHERE user_id = ? AND code = ?", (user_id, promo_code)).fetchone()
             return result is not None
 
     def get_discount(self, promo_code):
         with self.connection:
-            result = self.cursor.execute("SELECT discount FROM promo_codes WHERE code=?", (promo_code,)).fetchone()
+            result = self.cursor.execute("SELECT discount FROM promo_codes WHERE code = ?", (promo_code,)).fetchone()
             if result is not None:
                 return result[0]
             else:
@@ -129,3 +138,36 @@ class Database:
     def mark_promo_code_as_used(self, user_id, promo_code):
         with self.connection:
             self.cursor.execute("INSERT INTO used_promo_codes (user_id, code) VALUES (?, ?)", (user_id, promo_code))
+
+    def add_promocode(self, promo_code, discount, max_usage):
+        with self.connection:
+            self.cursor.execute("INSERT INTO promo_codes (code, discount, max_usage) VALUES (?, ?, ?)", (promo_code, discount, max_usage,))
+
+    def get_all_promocodes(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT * FROM promo_codes").fetchall()
+            return [row[0] for row in result]
+
+    def get_all_promocodes_each(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT * FROM promo_codes").fetchall()
+            return result
+
+    def delete_promocode(self, promo_code):
+        with self.connection:
+            self.cursor.execute("DELETE FROM promo_codes WHERE code = ?", (promo_code,))
+
+    def apply_promocode(self, promo_code):
+        with self.connection:
+            self.cursor.execute("SELECT max_usage FROM promo_codes WHERE code = ?", (promo_code,))
+            result = self.cursor.fetchone()
+            if result:
+                max_usage = result[0]
+                if max_usage >= 1:
+                    max_usage -= 1
+                    self.cursor.execute("UPDATE promo_codes SET max_usage = ? WHERE code = ?", (max_usage, promo_code))
+                    return True, max_usage
+                else:
+                    return None
+            else:
+                return None

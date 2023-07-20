@@ -7,7 +7,7 @@ from aiogram import Bot, types, Dispatcher
 from aiogram.types import Message
 from aiogram.utils import executor
 
-from tgbot.config import db, time_sub_day, CHAT_BOT_TOKEN, storage
+from tgbot.config import db, time_sub_day, CHAT_BOT_TOKEN, storage, ADMIN_IDS
 
 logger = logging.getLogger(__name__)
 
@@ -26,20 +26,23 @@ dp = Dispatcher(bot, storage)
 async def check_user(message: Message):
     user_sub = time_sub_day(db.get_time_sub(message.from_user.id))
     if user_sub is False:
-        await message.reply(f'Пользователь: <b>{message.from_user.full_name}</b> был кикнут.\nПричина: <b>Кончился срок подписки</b>')
-        return await remove_user(chat_id=message.chat.id, user_id=message.from_user.id)
+        if message.from_user.id not in ADMIN_IDS:
+            await message.reply(f'Пользователь: <b>{message.from_user.full_name}</b> был кикнут.\nПричина: <b>Кончился срок подписки</b>')
+            await remove_user(chat_id=message.chat.id, user_id=message.from_user.id)
 
 
 @dp.message_handler(content_types=types.ContentType.NEW_CHAT_MEMBERS)
 async def new_chat_members(message: Message):
     user_sub = time_sub_day(db.get_time_sub(message.from_user.id))
     user_sub_time = db.get_time_sub(message.from_user.id)
-
+    if message.from_user.id in ADMIN_IDS:
+        return await message.reply(f'Добро пожаловать <b>{message.from_user.full_name}</b>!\n')
     for user in message.new_chat_members:
         if user_sub is False:
-            await message.reply(
-                f'Пользователь: {message.from_user.full_name} был кикнут.\nПричина: <b>Кончился срок подписки</b>')
-            return await remove_user(chat_id=message.chat.id, user_id=user.id)
+            if message.from_user.id not in ADMIN_IDS:
+                await message.reply(
+                    f'Пользователь: {message.from_user.full_name} был кикнут.\nПричина: <b>Кончился срок подписки</b>')
+                return await remove_user(chat_id=message.chat.id, user_id=user.id)
         time_now = int(time.time())
         middle_time = int(user_sub_time) - time_now
         duration = datetime.timedelta(seconds=middle_time)

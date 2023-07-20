@@ -26,6 +26,24 @@ async def ban_user_id(call: CallbackQuery):
 
 
 async def ban_user_id_state(message: Message, state: FSMContext):
+    users = db.get_users()
+    usernames = db.get_usernames()
+    try:
+        user_id = int(message.text)
+        if user_id not in users:
+            await message.bot.send_message(
+                message.from_user.id,
+                "Такого пользователя нет в базе данных. Пожалуйста, убедитесь, что вы ввели правильный @username или ID пользователя.",
+            )
+            return await state.finish()
+    except Exception as e:
+        username = str(message.text)
+        if username not in usernames:
+            await message.bot.send_message(
+                message.from_user.id,
+                "Такого пользователя нет в базе данных. Пожалуйста, убедитесь, что вы ввели правильный @username или ID пользователя.",
+            )
+            return await state.finish()
     db.set_ban_status(message.text, 1)
     await message.bot.send_message(message.from_user.id, "Пользователь был успешно забанен.")
     await state.finish()
@@ -37,6 +55,24 @@ async def unban_user(call: CallbackQuery):
 
 
 async def unban_user_state(message: Message, state: FSMContext):
+    users = db.get_users()
+    usernames = db.get_usernames()
+    try:
+        user_id = int(message.text)
+        if user_id not in users:
+            await message.bot.send_message(
+                message.from_user.id,
+                "Такого пользователя нет в базе данных. Пожалуйста, убедитесь, что вы ввели правильный @username или ID пользователя.",
+            )
+            return await state.finish()
+    except Exception as e:
+        username = str(message.text)
+        if username not in usernames:
+            await message.bot.send_message(
+                message.from_user.id,
+                "Такого пользователя нет в базе данных. Пожалуйста, убедитесь, что вы ввели правильный @username или ID пользователя.",
+            )
+            return await state.finish()
     db.set_ban_status(message.text, 0)
     await message.bot.send_message(message.from_user.id, "Пользователь был успешно разбанен.")
     await state.finish()

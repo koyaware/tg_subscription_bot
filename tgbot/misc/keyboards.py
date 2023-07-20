@@ -72,7 +72,10 @@ btnSubOpenLink = InlineKeyboardButton('👉ВСТУПИТЬ👈', url='https://t
 sub_link_open_inline.insert(btnSubOpenLink)
 
 cancel_inline = InlineKeyboardMarkup()
-cancel_inline.insert(InlineKeyboardButton(text='❌ Отмена', callback_data='cancelbutton'))
+
+btnCancel = InlineKeyboardButton(text='❌ Отмена', callback_data='cancelbutton')
+
+cancel_inline.insert(btnCancel)
 
 feedback_inline = InlineKeyboardMarkup(row_width=1)
 
@@ -156,3 +159,14 @@ btnDeletePromocode = InlineKeyboardButton(text="💔 Удалить промок
 promocode_menu_inline.insert(btnAddPromocode)
 promocode_menu_inline.insert(btnDeletePromocode)
 promocode_menu_inline.insert(btnAllPromocodes)
+
+sub_pay_card_inline = InlineKeyboardMarkup(row_width=1)
+
+btnUserPaid = InlineKeyboardButton(text='✅ Я оплатил')
+
+sub_pay_card_inline.insert(btnUserPaid)
+sub_pay_card_inline.insert(btnCancel)
+
+sub_pay_card_sure_inline = InlineKeyboardMarkup(row_width=1)
+
+sub_pay_card_sure_inline.insert(btnCancel)

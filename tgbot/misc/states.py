@@ -19,3 +19,14 @@ class MailingState(StatesGroup):
 
 class PromoCodeState(StatesGroup):
     code = State()
+    add_name = State()
+    add_discount = State()
+    add_max_usage = State()
+    delete = State()
+
+
+class SubGiftState(StatesGroup):
+    week = State()
+    month = State()
+    three_month = State()
+    half_year = State()

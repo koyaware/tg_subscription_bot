@@ -162,7 +162,7 @@ promocode_menu_inline.insert(btnAllPromocodes)
 
 sub_pay_card_inline = InlineKeyboardMarkup(row_width=1)
 
-btnUserPaid = InlineKeyboardButton(text='✅ Я оплатил')
+btnUserPaid = InlineKeyboardButton(text='✅ Я оплатил', callback_data='user_paid')
 
 sub_pay_card_inline.insert(btnUserPaid)
 sub_pay_card_inline.insert(btnCancel)
@@ -170,3 +170,12 @@ sub_pay_card_inline.insert(btnCancel)
 sub_pay_card_sure_inline = InlineKeyboardMarkup(row_width=1)
 
 sub_pay_card_sure_inline.insert(btnCancel)
+
+
+sub_success_or_ban_inline = InlineKeyboardMarkup()
+
+btnSubSuccess = InlineKeyboardButton(text='✅ Подтвердить', callback_data='sub_success')
+btnSubBan = InlineKeyboardButton(text='✖ Спам', callback_data='sub_ban')
+
+sub_success_or_ban_inline.insert(btnSubSuccess)
+sub_success_or_ban_inline.insert(btnSubBan)

@@ -171,3 +171,21 @@ class Database:
                     return None
             else:
                 return None
+
+    def set_active_status(self, user_id, active_status):
+        with self.connection:
+            return self.cursor.execute("UPDATE users SET free_active = ? WHERE user_id = ?", (active_status, user_id,))
+
+    def get_active_status(self, user_id):
+        with self.connection:
+            result = self.cursor.execute("SELECT free_active FROM users WHERE user_id = ?", (user_id,)).fetchall()
+            if len(result) == 0:
+                return False
+
+            for row in result:
+                active_status = int(row[0])
+
+            if active_status > 0:
+                return True
+            else:
+                return False

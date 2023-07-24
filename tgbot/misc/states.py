@@ -33,4 +33,6 @@ class SubGiftState(StatesGroup):
 
 
 class SubPayCardState(StatesGroup):
-    pay = State()
+    pay_month = State()
+    pay_three_month = State()
+    pay_half_year = State()

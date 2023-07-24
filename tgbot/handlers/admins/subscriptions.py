@@ -1,20 +1,42 @@
 import time
 
 from aiogram import Dispatcher
-from aiogram.types import ContentType, CallbackQuery, PreCheckoutQuery, Message
+from aiogram.types import CallbackQuery
 
-from tgbot.config import PAYMENT_TOKEN, days_to_seconds, db, ADMIN_IDS
+from tgbot.config import days_to_seconds, db, ADMIN_IDS
 from tgbot.filters.is_ban import IsBanFilter
-from tgbot.misc.keyboards import submonthmenu_inline, subhalfyear_inline, subweekmenu_inline, sub_link_inline, \
-    subfreemenu_inline, subthreemonthmenu_inline
+from tgbot.misc.keyboards import submonthmenu_inline, subhalfyear_inline, subweekmenu_inline, subfreemenu_inline, \
+    subthreemonthmenu_inline, sub_link_inline
 
 
-async def sub_free_menu(call: CallbackQuery): # TODO: НАДО СДЕЛАТЬ БЕЗ ПРОМОКОДА! ДОБАВИВ ACTIVE В БД!
+async def sub_free_menu(call: CallbackQuery):
     await call.bot.delete_message(call.from_user.id, call.message.message_id)
     await call.bot.send_message(call.from_user.id, '<b>14 дней (2 недели)\nЦена: 0р\nСрок подписки: 2 недели</b>\n\n'
-                                                   'Введите промокод в поле ввода промокода: \n\n<code>NEW123</code>\n\n'
                                                    'Вы получите приглашение в канал/чат 👇\n<b>- ТРАНСФЕР-МОСТ Заказы</b>',
                                 reply_markup=subfreemenu_inline)
+
+
+async def sub_free(call: CallbackQuery):
+    status = db.get_active_status(call.from_user.id)
+    if status is False:
+        db.set_active_status(call.from_user.id, 1)
+        time_sub = int(time.time()) + days_to_seconds(14)
+        db.set_time_sub(call.from_user.id, time_sub)
+        await call.bot.edit_message_text("Вам выдана подписка на месяц!\n"
+                                         "Вы получили приглашение в канал/чат 👇\n"
+                                         "<b>- ТРАНСФЕР-МОСТ Заказы</b>\n"
+                                         "Для перехода в главное меню, отправьте боту команду"
+                                         " - /start.",
+                                         call.message.chat.id, call.message.message_id,
+                                         reply_markup=sub_link_inline,)
+        for admin in ADMIN_IDS:
+            await call.bot.send_message(admin, f"💰 Новая подписка.\n"
+                                               f"\nПользователь: @{call.from_user.username}, <b>{call.from_user.first_name}</b>\n"
+                                               f"[ID:{call.from_user.id}] только что оформил подписку на 14 дней (2 недели)."
+                                               f"\n\nСрок подписки: <b>14 дней.</b>")
+    else:
+        return await call.bot.edit_message_text('Вы уже использовали пробную подписку!',
+                                                call.message.chat.id, call.message.message_id)
 
 
 async def sub_week_menu(call: CallbackQuery):
@@ -40,7 +62,7 @@ async def sub_three_month_menu(call: CallbackQuery):
 
 async def sub_half_year_menu(call: CallbackQuery):
     await call.bot.delete_message(call.from_user.id, call.message.message_id)
-    await call.bot.send_message(call.from_user.id, '<b>6 месяцев / Полгода\nЦена: 500р\nСрок подписки: 6 месяцев</b>\n\n'
+    await call.bot.send_message(call.from_user.id, '<b>6 месяцев / Полгода\nЦена: 550р\nСрок подписки: 6 месяцев</b>\n\n'
                                                    'Вы получите приглашение в канал/чат 👇\n<b>- ТРАНСФЕР-МОСТ Заказы</b>',
                                 reply_markup=subhalfyear_inline)
 
@@ -140,6 +162,9 @@ async def sub_half_year_menu(call: CallbackQuery):
 def register_subscription_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(
         sub_free_menu, IsBanFilter(), text='subfreemenu', state='*'
+    )
+    dp.register_callback_query_handler(
+        sub_free, IsBanFilter(), text='subfree', state='*'
     )
     dp.register_callback_query_handler(
         sub_week_menu, IsBanFilter(), text='subweekmenu', state='*'

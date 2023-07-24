@@ -40,7 +40,7 @@ btnSubFree = InlineKeyboardButton(text="Пробный 14 дней - 0 ₽", cal
 btnSubWeek = InlineKeyboardButton(text="Неделя - 150 ₽", callback_data="subweekmenu")
 btnSubMonth = InlineKeyboardButton(text="Месяц - 150 ₽", callback_data="submonthmenu")
 btnSubThreeMonth = InlineKeyboardButton(text="3 месяца - 300 ₽", callback_data="subthreemonthmenu")
-btnSubHalfYear = InlineKeyboardButton(text="Полгода - 500 ₽", callback_data="subhalfyearmenu")
+btnSubHalfYear = InlineKeyboardButton(text="Полгода - 550 ₽", callback_data="subhalfyearmenu")
 
 sub_inline_markup.insert(btnSubFree)
 # sub_inline_markup.insert(btnSubWeek)
@@ -136,6 +136,9 @@ subhalfyear_inline.insert(btnPromoCode)
 
 subfreemenu_inline = InlineKeyboardMarkup(row_width=1)
 
+btnPayFree = InlineKeyboardButton(text="🆓 Активировать", callback_data='subfree')
+
+subfreemenu_inline.insert(btnPayFree)
 subfreemenu_inline.insert(btnPromoCode)
 
 admin_sub_gift_inline = InlineKeyboardMarkup(row_width=1)
@@ -160,17 +163,26 @@ promocode_menu_inline.insert(btnAddPromocode)
 promocode_menu_inline.insert(btnDeletePromocode)
 promocode_menu_inline.insert(btnAllPromocodes)
 
-sub_pay_card_inline = InlineKeyboardMarkup(row_width=1)
+sub_pay_month_card_inline = InlineKeyboardMarkup(row_width=1)
+sub_pay_three_month_card_inline = InlineKeyboardMarkup(row_width=1)
+sub_pay_half_year_card_inline = InlineKeyboardMarkup(row_width=1)
 
-btnUserPaid = InlineKeyboardButton(text='✅ Я оплатил', callback_data='user_paid')
+btnUserPaid = InlineKeyboardButton(text='✅ Я оплатил', callback_data='user_paid_month')
+btnUserPaidTheeMonth = InlineKeyboardButton(text='✅ Я оплатил', callback_data='user_paid_three_month')
+btnUserPaidHalfYear = InlineKeyboardButton(text='✅ Я оплатил', callback_data='user_paid_half_year')
 
-sub_pay_card_inline.insert(btnUserPaid)
-sub_pay_card_inline.insert(btnCancel)
+sub_pay_month_card_inline.insert(btnUserPaid)
+sub_pay_month_card_inline.insert(btnCancel)
+
+sub_pay_three_month_card_inline.insert(btnUserPaidTheeMonth)
+sub_pay_three_month_card_inline.insert(btnCancel)
+
+sub_pay_half_year_card_inline.insert(btnUserPaidHalfYear)
+sub_pay_half_year_card_inline.insert(btnCancel)
 
 sub_pay_card_sure_inline = InlineKeyboardMarkup(row_width=1)
 
 sub_pay_card_sure_inline.insert(btnCancel)
-
 
 sub_success_or_ban_inline = InlineKeyboardMarkup()
 

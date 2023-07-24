@@ -16,8 +16,7 @@ from tgbot.misc.states import SubPayCardState
 async def sub_pay_month_card(call: CallbackQuery):
     await call.message.bot.edit_message_text('Тариф: <b>Месяц</b>\nСпособ оплаты:'
                                              ' <b>Перевод по номеру телефона</b>\nСумма к отплате: <b>150₽.</b>'
-                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>'
-                                             '\nСкрин чека отправить админу, либо сюда же в бота',
+                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>',
                                              call.message.chat.id, call.message.message_id,
                                              reply_markup=sub_pay_month_card_inline)
 
@@ -25,8 +24,7 @@ async def sub_pay_month_card(call: CallbackQuery):
 async def sub_pay_three_month_card(call: CallbackQuery):
     await call.message.bot.edit_message_text('Тариф: <b>3 месяца</b>\nСпособ оплаты:'
                                              ' <b>Перевод по номеру телефона</b>\nСумма к отплате: <b>300₽.</b>'
-                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>'
-                                             '\nСкрин чека отправить админу, либо сюда же в бота',
+                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>',
                                              call.message.chat.id, call.message.message_id,
                                              reply_markup=sub_pay_three_month_card_inline)
 
@@ -34,8 +32,7 @@ async def sub_pay_three_month_card(call: CallbackQuery):
 async def sub_pay_half_year_card(call: CallbackQuery):
     await call.message.bot.edit_message_text('Тариф: <b>Полгода</b>\nСпособ оплаты:'
                                              ' <b>Перевод по номеру телефона</b>\nСумма к отплате: <b>550₽.</b>'
-                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>'
-                                             '\nСкрин чека отправить админу, либо сюда же в бота',
+                                             '\nИнформация об оплате:\nТинков <code>89124436363</code>',
                                              call.message.chat.id, call.message.message_id,
                                              reply_markup=sub_pay_half_year_card_inline)
 
